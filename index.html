@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Hotel Registration Form</title>
+  <link rel="stylesheet" href="styl.css">
+ 
+</head>
+<body>
+ 
+  <h1>Hotel Registration Form</h1>
+  
+  <form id="registrationForm">
+  <div id="form">
+    <h2>Customer information</h2>
+    <div class="form-group">
+      <label for="name">Name:</label>
+      <input type="text" id="name" required>
+    </div>
+    
+    <div class="form-group">
+      <label for="checkin">Check-in Date:</label>
+      <input type="date" id="checkin" required>
+    </div>
+   
+    <div class="form-group">
+      <label for="noOfDays">Number of Days:</label>
+      <input type="number" id="noOfDays" required>
+    </div>
+    <div class="form-group">
+      <label for="noOfPersons">Number of Persons:</label>
+      <input type="number" id="noOfPersons" required>
+    </div>
+  </div>
+    <div class="form-group1">
+      <h2>Room Type</h2>
+      <div class="one">
+        <div class="box1">
+            <img src="images.jpeg">
+      <input type="radio" id="roomType2" name="roomType" value="2500"> Deluxe
+        </div>
+        <div class="box1">
+          <img src="download.jpeg">
+      
+      <input type="radio" id="roomType3" name="roomType" value="4000"> Suite 
+    
+        </div>
+      </div>
+    </div>
+    
+    <div class="form-group2">
+      <h2>Amenities</h2>
+      <div class="one">
+        <div class="box1">
+            <img src="ac.jpeg">
+      <input type="checkbox" id="amenity2" value="1000"> A/C
+        </div>
+        <div class="box1">
+          <img src="locker.jpg">
+      <input type="checkbox" id="amenity3" value="300"> Locker
+    </div>
+  </div>
+    </div>
+    <div class="form-group3">
+      <label for="advanceAmount">Advance Amount</label>
+      <input type="number" id="advanceAmount" required>
+    </div>
+    <div class="form-group4">
+      <button type="submit">Register</button>
+    </div>
+  </form>
+  
+
+  <div id="totalAmountResult" class="result"></div>
+  <div id="receipt" class="receipt"></div>
+
+  <script>
+    document.getElementById('registrationForm').addEventListener('submit', function(e) {
+      e.preventDefault(); // Prevent form submission
+      
+      // Get values from the form
+      var name = document.getElementById('name').value;
+      var checkinDate = document.getElementById('checkin').value;
+     
+      var noOfDays = parseInt(document.getElementById('noOfDays').value);
+      var roomTypeElements = document.getElementsByName('roomType');
+      var roomType = 0;
+      var noOfPersons = parseInt(document.getElementById('noOfPersons').value);
+      var amenities = document.querySelectorAll('input[type="checkbox"]:checked');
+      var advanceAmount = parseFloat(document.getElementById('advanceAmount').value);
+
+      // Calculate total amount
+      var roomTypePrice = 0;
+      for (var i = 0; i < roomTypeElements.length; i++) {
+        if (roomTypeElements[i].checked) {
+          roomTypePrice = parseFloat(roomTypeElements[i].value);
+          break;
+        }
+      }
+      var totalAmount = roomTypePrice * noOfDays;
+      totalAmount += (noOfPersons > 2) ? (noOfPersons - 2) * 1000 : 0;
+     
+
+      var receiptText = 'Name: ' + name + '<br>' +
+                        'Check-in Date: ' + checkinDate + '<br>' +
+                        'Number of Days: ' + noOfDays + '<br>' +
+                        'Number of Persons: ' + noOfPersons + '<br>' +
+                        'Breakdown of Expenses:<br>'+
+                        'Room Expendature:' + totalAmount + '<br>' ;
+                        
+
+      for (var i = 0; i < amenities.length; i++) {
+        var amenityPrice = parseFloat(amenities[i].value);
+        var amenityTotalPrice = amenityPrice * noOfDays;
+        totalAmount += amenityTotalPrice;
+        receiptText += amenities[i].nextSibling.textContent + ': ' + amenityTotalPrice ;
+        var due=totalAmount-advanceAmount;
+      }
+
+      // Display the result
+      var result = document.getElementById('totalAmountResult');
+      result.innerHTML = 'Total Amount:' + totalAmount +'<br>'+'Due Amount:' +due;
+
+      // Display the receipt
+      var receipt = document.getElementById('receipt');
+      receipt.innerHTML = receiptText;
+      
+
+    });
+  </script>
+  
+</body>
+</html>
+
